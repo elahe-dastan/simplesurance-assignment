@@ -6,6 +6,8 @@ import (
 	"github.com/elahe-dastan/simplesurance-assignment/internal/hitcounter"
 )
 
+var _ hitcounter.HitCounter = new(hitcounter.StaticHitCounter)
+
 func TestStaticHitCounter(t *testing.T) {
 	hc := hitcounter.NewStatic()
 

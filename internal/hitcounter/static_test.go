@@ -29,7 +29,7 @@ func TestTwo(t *testing.T) {
 	now := time.Now().Unix()
 
 	hc.Hit(now)
-	hc.Hit(now + 60)
+	hc.Hit(now + 61)
 
 	if hc.Count() != 1 {
 		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 1)

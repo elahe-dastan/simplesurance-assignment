@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -24,6 +25,8 @@ func (s Server) Register(h http.Handler) {
 }
 
 func (s Server) Run() error {
+	log.Printf("listening on %s\n", s.srv.Addr)
+
 	if err := s.srv.ListenAndServe(); err != nil {
 		return fmt.Errorf("serving and listening failed %w", err)
 	}

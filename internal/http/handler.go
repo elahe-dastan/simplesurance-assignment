@@ -13,10 +13,20 @@ type Handler struct {
 	hc hitcounter.HitCounter
 }
 
-func (h Handler) Handle(req *http.Request, res http.ResponseWriter) {
+func NewHandler(hc hitcounter.HitCounter) Handler {
+	return Handler{
+		hc: hc,
+	}
+}
+
+func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	h.hc.Hit(time.Now().Unix())
 
 	count := h.hc.Count()
+
+	res.Header().Add("Content-Type", "application/json")
+
+	res.WriteHeader(http.StatusOK)
 
 	bytes, err := json.Marshal(count)
 	if err != nil {
@@ -30,8 +40,4 @@ func (h Handler) Handle(req *http.Request, res http.ResponseWriter) {
 
 		return
 	}
-
-	res.Header().Add("Content-Type", "application/json")
-
-	res.WriteHeader(http.StatusOK)
 }

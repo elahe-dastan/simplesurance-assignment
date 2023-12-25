@@ -67,10 +67,10 @@ func (hc *StaticHitCounter) Hit(seconds int64) {
 		preWindowEnd := seconds % window
 		cellsToRemove := seconds - hc.LastInsertion
 
-		if cellsToRemove > window {
-			hc.Hits = [window]int64{}
-		} else {
-			for i := preWindowEnd; i > preWindowEnd-cellsToRemove; i-- {
+		for i := preWindowEnd; i > preWindowEnd-cellsToRemove; i-- {
+			if i < 0 {
+				hc.Hits[i%window+window] = 0
+			} else {
 				hc.Hits[i] = 0
 			}
 		}

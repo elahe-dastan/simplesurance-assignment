@@ -11,7 +11,7 @@ type StaticHitCounter struct {
 	lock          sync.Mutex
 	lastInsertion int64
 	startupTime   int64
-	hits          [60]int64
+	hits          [window]int64
 }
 
 func NewStatic() *StaticHitCounter {
@@ -19,7 +19,7 @@ func NewStatic() *StaticHitCounter {
 		lock:          sync.Mutex{},
 		lastInsertion: 0,
 		startupTime:   time.Now().Unix(),
-		hits:          [60]int64{},
+		hits:          [window]int64{},
 	}
 }
 
@@ -27,14 +27,20 @@ func (hc *StaticHitCounter) Hit(seconds int64) {
 	hc.lock.Lock()
 	defer hc.lock.Unlock()
 
-	diff := seconds - hc.startupTime
+	timeFromStart := seconds - hc.startupTime
 
-	if diff > window {
-		for i := seconds % window; i > (seconds%window)-(seconds-hc.lastInsertion); i-- {
-			hc.hits[i] = 0
+	if timeFromStart > window {
+		// This shows the last cell of previous window
+		preWindowEnd := seconds % window
+		cellsToRemove := seconds - hc.lastInsertion
+
+		if cellsToRemove > window {
+			hc.hits = [window]int64{}
+		} else {
+			for i := preWindowEnd; i > preWindowEnd-cellsToRemove; i-- {
+				hc.hits[i] = 0
+			}
 		}
-	} else {
-		hc.hits[seconds] = 0
 	}
 
 	hc.lastInsertion = seconds

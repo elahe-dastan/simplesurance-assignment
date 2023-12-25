@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/elahe-dastan/simplesurance-assignment/internal"
 )
 
 var filename = "disk"

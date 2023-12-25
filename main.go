@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"github.com/elahe-dastan/simplesurance-assignment/internal"
 	"github.com/elahe-dastan/simplesurance-assignment/internal/http"
 )
 

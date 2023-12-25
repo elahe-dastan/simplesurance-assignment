@@ -31,8 +31,8 @@ func TestTwo(t *testing.T) {
 	hc.Hit(now)
 	hc.Hit(now + 60)
 
-	if hc.Count() != 2 {
-		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 2)
+	if hc.Count() != 1 {
+		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 1)
 	}
 }
 

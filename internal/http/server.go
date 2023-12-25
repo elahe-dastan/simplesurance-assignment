@@ -8,6 +8,8 @@ import (
 	"github.com/elahe-dastan/simplesurance-assignment/internal"
 )
 
+var filename = "disk"
+
 type Server struct {
 	srv        *http.Server
 	hitCounter *internal.HitCounter
@@ -26,15 +28,27 @@ func New(hitCounter *internal.HitCounter) Server {
 
 func (s Server) Register(h http.Handler) {
 	s.srv.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// New logic to handle hits
-		timestamp := time.Now().Unix()
-		s.hitCounter.Hit(timestamp)
 
-		hitCount := s.hitCounter.GetHitCount()
-
-		_, err := fmt.Fprintf(w, "Total Hits: %d", hitCount)
+		hc, err := internal.Load(filename)
 		if err != nil {
 			return
+		}
+
+		// New logic to handle hits
+		timestamp := time.Now().Unix()
+		hc.Hit(timestamp, filename)
+
+		hitCount := hc.GetHitCount()
+
+		_, err = fmt.Fprintf(w, "Total Hits: %d", hitCount)
+		if err != nil {
+			return
+		}
+
+		// Add code to save state
+		err = hc.Save(filename)
+		if err != nil {
+			// handle error, for example, log it or return it
 		}
 	})
 }

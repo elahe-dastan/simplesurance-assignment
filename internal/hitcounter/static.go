@@ -63,7 +63,7 @@ func (hc *StaticHitCounter) Hit(seconds int64) {
 
 	timeFromStart := seconds - hc.StartupTime
 
-	if timeFromStart > window {
+	if timeFromStart >= window {
 		// This shows the last cell of previous window
 		preWindowEnd := seconds % window
 		cellsToRemove := seconds - hc.LastInsertion

@@ -2,7 +2,6 @@ package hitcounter
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"sync"
 	"time"
@@ -98,7 +97,11 @@ func (hc *StaticHitCounter) Hit(seconds int64) {
 		hc.Hits = [window]int64{}
 	} else {
 		for i := preWindowEnd; i > preWindowEnd-cellsToRemove; i-- {
-			hc.Hits[i] = 0
+			if i < 0 {
+				hc.Hits[i+window] = 0
+			} else {
+				hc.Hits[i] = 0
+			}
 		}
 	}
 

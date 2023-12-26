@@ -63,15 +63,14 @@ each request to this array we follow below precedure.
 
 ```mermaid
 graph TD;
-  NewRequest("new request") -->|if time of the request is in the first server up time window| ArrayTimeOfRequest("array[time of request % window]++");
-  NewRequest("new request") -->|if time of the request has passed the first server up time window| Empty("empty expired cells");
-  Empty("empty expired cells\n cells to remove = (time of new request) - (time of last request)") -->|cells to remove > window| ReCreate("re-create the array");
-  Empty("empty expired cells\n cells to remove = (time of new request) - (time of last request)") -->|"(time of new request) - (time of last request) < window"| CalculateExpired("time of new");
-  ReCreate("re-create the array") --> ArrayTimeOfRequest("array[time of request % window]++");
-  CalculateExpired("time of new") --> ArrayTimeOfRequest("array[time of request % window]++");
+  NewRequest("request") -->|request time is in the first server up time window| ArrayTimeOfRequest("array[request time % window]++");
+  NewRequest -->|request time is after\n the first server up time window| Empty("# expired cells = request time - previous request time");
+  Empty -->|# expired cells > window| ReCreate("re-create the array");
+  Empty -->|# expired cells < window| CalculateExpired("start from end of previous window \n and set # of expired cells to zero");
+  ReCreate --> ArrayTimeOfRequest;
+  CalculateExpired --> ArrayTimeOfRequest;
 ```
 
-[//]: # (Empty&#40;"empty expired cells"&#41; --> ArrayTimeOfRequest&#40;"array[time of request % window]++"&#41;;)
 
 This solution has constant memory and time completexity which is good.
 For each request we locked the array because we want to read and also

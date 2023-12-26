@@ -50,9 +50,24 @@ simplesurance-assignment.exe
 
 ## Implementation
 
-In the current implementation we are using an array with fixed number of rooms which
-each room indicates the number of requests are arrived in that second. For each request
-we are summing up the arrieved requests and returns the response.
+There are different algorithms to implement with their own pros and cons. The simplest approach is implementing
+a deque in which I was concerned about the size of the deque that could grow a lot based on number of requests and also 
+though the amortized time complexity will be O(1) but some requests may take much longer than the others so, I 
+implemented another algorithm which I'm going to explain besides the rest of code and take a look at why each decision 
+was made.
+
+In the current implementation we are using a fixed-window-size array in which each room indicates the number of requests 
+queried in that second (I descreteized the time by seconds, if this code was going to be used in a use like 
+microprocessor we had to change our idea). To return the response we simply sum up the numbers in this array. To write
+each request to this array we follow below precedure.
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 
 This solution has constant memory and time completexity which is good.
 For each request we locked the array because we want to read and also

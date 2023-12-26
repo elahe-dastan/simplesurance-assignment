@@ -9,7 +9,59 @@ persisting data to a file.
 When you’re done, please share your solution with me, and I’ll ask our Tech Team to review it.
 
 - **Deadline**: Feel free to do it at your own pace, but, to give you an overview, candidates usually
-take up to 3 days to complete the task.
+  take up to 3 days to complete the task.
 - **Submission**: We accept your task via GitHub, GitLab or any Git-based Software. Please also
-share how much time was needed to finish the task.
+  share how much time was needed to finish the task.
 - **Review**: We ask for 2 to 3 days to review your results.
+
+## How to Build and Run
+
+This guide assumes you have Go installed on your system. If not, please [install Go](https://golang.org/doc/install)
+first.
+
+### Build
+
+1. Open a terminal.
+2. Navigate to the directory containing the source code of the project.
+   If the source code is in your current directory, you can skip this step.
+3. Compile the project by executing the following command:
+
+```bash
+go build
+```
+
+This will build the executable from the source files. If successful, an executable file
+will be created in the current directory.
+
+### Run
+
+After building the project,
+you can run the executable directly from the command line:
+
+```bash
+./simplesurance-assignment
+```
+
+If you are using Windows, you can run the executable without the `./`:
+
+```powershell
+simplesurance-assignment.exe
+```
+
+## Implementation
+
+In the current implementation we are using an array with fixed number of rooms which
+each room indicates the number of requests are arrived in that second. For each request
+we are summing up the arrieved requests and returns the response.
+
+This solution has constant memory and time completexity which is good.
+For each request we locked the array because we want to read and also
+make some rooms sets to zero (so we don't use `RWLock` here).
+
+Writing into a file using the current solution is easy. We write
+the array using JSON format into a file which is named `state.json` by default.
+Then read the file in the start phase and if there was any error we fallback to use
+any empty state.
+
+Writing to file is time consuming, so we start another goroutine which writes the file
+priodically (period is configurable) by locking the counter which seems more configurable and have better performance.

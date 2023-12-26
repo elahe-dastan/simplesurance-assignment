@@ -89,6 +89,8 @@ performance.
 
 ## Load test results
 
+```
+
           /\      |‾‾| /‾‾/   /‾‾/   
      /\  /  \     |  |/  /   /  /    
     /  \/    \    |     (   /   ‾‾\  
@@ -126,5 +128,6 @@ scenarios: (100.00%) 1 scenario, 100 max VUs, 1m0s max duration (incl. graceful 
 
 running (0m30.1s), 000/100 VUs, 3000 complete and 0 interrupted iterations
 default ✓ [======================================] 100 VUs  30s
+```
 
-On a 2021 m1 macbook pro
+On a 2021 M1 Macbook Pro

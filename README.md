@@ -63,7 +63,7 @@ each request to this array we follow below precedure.
 
 ```mermaid
 graph TD;
-  NewRequest("request") -->|request time is in the first server up time window| ArrayTimeOfRequest("array[request time % window]++");
+  NewRequest("request") -->|request time is in the \n first server up time window| ArrayTimeOfRequest("array[request time % window]++");
   NewRequest -->|request time is after\n the first server up time window| Empty("# expired cells = request time - previous request time");
   Empty -->|# expired cells > window| ReCreate("re-create the array");
   Empty -->|# expired cells < window| CalculateExpired("start from end of previous window \n and set # of expired cells to zero");
@@ -72,14 +72,17 @@ graph TD;
 ```
 
 
-This solution has constant memory and time completexity which is good.
-For each request we locked the array because we want to read and also
+This solution has O(1) memory and time complexity.
+For each request we lock the array because we want to read and also
 make some rooms sets to zero (so we don't use `RWLock` here).
 
+## Saving to Disk
 Writing into a file using the current solution is easy. We write
 the array using JSON format into a file which is named `state.json` by default.
 Then read the file in the start phase and if there was any error we fallback to use
 any empty state.
 
-Writing to file is time consuming, so we start another goroutine which writes the file
-priodically (period is configurable) by locking the counter which seems more configurable and have better performance.
+About how often we want to write to this file we should answer to these question: "How important is consistency?" and 
+"How important is availability?" If consistency is so important to use we may choose to write to file by each and every 
+request but since writing to a file is so time-consuming, we start another goroutine which writes ot the file
+periodically (period is configurable) by locking the array which seems more configurable and have better performance.

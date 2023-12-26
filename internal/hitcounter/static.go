@@ -10,7 +10,7 @@ import (
 const window = int64(60)
 
 type StaticHitCounter struct {
-	lock          sync.Mutex
+	lock          sync.RWMutex
 	LastInsertion int64         `json:"last_insertion,omitempty"`
 	StartupTime   int64         `json:"startup_time,omitempty"`
 	Hits          [window]int64 `json:"hits,omitempty"`
@@ -18,7 +18,7 @@ type StaticHitCounter struct {
 
 func NewStatic() *StaticHitCounter {
 	return &StaticHitCounter{
-		lock:          sync.Mutex{},
+		lock:          sync.RWMutex{},
 		LastInsertion: 0,
 		StartupTime:   time.Now().Unix(),
 		Hits:          [window]int64{},
@@ -43,8 +43,8 @@ func FromFileStatic(fn string) (*StaticHitCounter, error) {
 
 // ToFileStatic locks the HitCounter data structure and saves it to a file
 func ToFileStatic(fn string, hc *StaticHitCounter) error {
-	hc.lock.Lock()
-	defer hc.lock.Unlock()
+	hc.lock.RLock()
+	defer hc.lock.RUnlock()
 
 	bytes, err := json.Marshal(hc)
 	if err != nil {
@@ -106,6 +106,9 @@ func (hc *StaticHitCounter) Hit(seconds int64) {
 
 // Count sums up the Hits array and returns the total number of requests in the last window
 func (hc *StaticHitCounter) Count() int64 {
+	hc.lock.RLock()
+	defer hc.lock.RUnlock()
+
 	res := int64(0)
 	for i := int64(0); i < window; i++ {
 		res += hc.Hits[i]

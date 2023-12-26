@@ -71,18 +71,16 @@ graph TD;
   CalculateExpired --> ArrayTimeOfRequest;
 ```
 
-
 This solution has O(1) memory and time complexity.
-For each request we lock the array because we want to read and also
-make some rooms sets to zero (so we don't use `RWLock` here).
 
 ## Saving to Disk
+
 Writing into a file using the current solution is easy. We write
 the array using JSON format into a file which is named `state.json` by default.
 Then read the file in the start phase and if there was any error we fallback to use
 any empty state.
 
-About how often we want to write to this file we should answer to these question: "How important is consistency?" and 
-"How important is availability?" If consistency is so important to use we may choose to write to file by each and every 
+About how often we want to write to this file we should answer to these question: "How important is consistency?" and
+"How important is availability?" If consistency is so important to use we may choose to write to file by each and every
 request but since writing to a file is so time-consuming, we start another goroutine which writes ot the file
 periodically (period is configurable) by locking the array which seems more configurable and have better performance.

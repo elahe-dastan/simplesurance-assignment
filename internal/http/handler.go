@@ -34,11 +34,15 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Printf("cannot marshal count into json %s", err)
 
+		res.WriteHeader(http.StatusInternalServerError)
+
 		return
 	}
 
 	if _, err := res.Write(bytes); err != nil {
 		log.Printf("cannot write into the response %s", err)
+
+		res.WriteHeader(http.StatusInternalServerError)
 
 		return
 	}

@@ -86,3 +86,45 @@ About how often we want to write to this file we should answer to these question
 and every request but since writing to a file is so time-consuming and may affect availability under high load, instead 
 I started another goroutine which writes to the file periodically (period is configurable), this approach has better 
 performance.
+
+## Load test results
+
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+/          \   |  |\  \ |  (‾)  |
+/ __________ \  |__| \__\ \_____/ .io
+
+execution: local
+script: loadtest.js
+output: -
+
+scenarios: (100.00%) 1 scenario, 100 max VUs, 1m0s max duration (incl. graceful stop):
+* default: 100 looping VUs for 30s (gracefulStop: 30s)
+
+
+     ✓ success
+
+     checks.........................: 100.00% ✓ 3000      ✗ 0    
+     data_received..................: 332 kB  11 kB/s
+     data_sent......................: 240 kB  8.0 kB/s
+     http_req_blocked...............: avg=85.63µs  min=1µs  med=4µs    max=3.34ms p(90)=9µs     p(95)=25.04µs 
+     http_req_connecting............: avg=79.08µs  min=0s   med=0s     max=2.81ms p(90)=0s      p(95)=0s      
+     http_req_duration..............: avg=1.78ms   min=87µs med=1.66ms max=8.57ms p(90)=3.17ms  p(95)=3.8ms   
+       { expected_response:true }...: avg=1.78ms   min=87µs med=1.66ms max=8.57ms p(90)=3.17ms  p(95)=3.8ms   
+     http_req_failed................: 0.00%   ✓ 0         ✗ 3000 
+     http_req_receiving.............: avg=45.77µs  min=4µs  med=18µs   max=6.21ms p(90)=60µs    p(95)=141.04µs
+     http_req_sending...............: avg=136.89µs min=3µs  med=12µs   max=6.81ms p(90)=424.1µs p(95)=779.09µs
+     http_req_tls_handshaking.......: avg=0s       min=0s   med=0s     max=0s     p(90)=0s      p(95)=0s      
+     http_req_waiting...............: avg=1.6ms    min=63µs med=1.49ms max=6.87ms p(90)=2.88ms  p(95)=3.3ms   
+     http_reqs......................: 3000    99.675063/s
+     iteration_duration.............: avg=1s       min=1s   med=1s     max=1.01s  p(90)=1s      p(95)=1s      
+     iterations.....................: 3000    99.675063/s
+     vus............................: 100     min=100     max=100
+     vus_max........................: 100     min=100     max=100
+
+
+running (0m30.1s), 000/100 VUs, 3000 complete and 0 interrupted iterations
+default ✓ [======================================] 100 VUs  30s
+
+On a 2021 m1 macbook pro

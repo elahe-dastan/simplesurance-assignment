@@ -90,6 +90,17 @@ func TestSix(t *testing.T) {
 	hc.Hit(now + 61)
 
 	if hc.Count() != 2 {
-		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 1)
+		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 2)
+	}
+}
+
+func TestSeven(t *testing.T) {
+	hc := hitcounter.NewStatic()
+
+	hc.Hit(1703613474)
+	hc.Hit(1703613481)
+
+	if hc.Count() != 2 {
+		t.Fatalf("number of hits is %d which is not equal to %d", hc.Count(), 2)
 	}
 }

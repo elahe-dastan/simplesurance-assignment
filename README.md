@@ -65,10 +65,13 @@ each request to this array we follow below precedure.
 graph TD;
   NewRequest("new request") -->|if time of the request is in the first server up time window| ArrayTimeOfRequest("array[time of request % window]++");
   NewRequest("new request") -->|if time of the request has passed the first server up time window| Empty("empty expired cells");
-  Empty("empty expired cells") --> ArrayTimeOfRequest("array[time of request % window]++");
   Empty("empty expired cells\n cells to remove = (time of new request) - (time of last request)") -->|cells to remove > window| ReCreate("re-create the array");
   Empty("empty expired cells\n cells to remove = (time of new request) - (time of last request)") -->|"(time of new request) - (time of last request) < window"| CalculateExpired("time of new");
+  ReCreate("re-create the array") --> ArrayTimeOfRequest("array[time of request % window]++");
+  CalculateExpired("time of new") --> ArrayTimeOfRequest("array[time of request % window]++");
 ```
+
+[//]: # (Empty&#40;"empty expired cells"&#41; --> ArrayTimeOfRequest&#40;"array[time of request % window]++"&#41;;)
 
 This solution has constant memory and time completexity which is good.
 For each request we locked the array because we want to read and also

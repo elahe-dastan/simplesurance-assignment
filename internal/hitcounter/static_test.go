@@ -96,6 +96,8 @@ func TestSix(t *testing.T) {
 
 func TestSeven(t *testing.T) {
 	hc := hitcounter.NewStatic()
+	// by setting it to zero, we will bypass being less than window size.
+	hc.StartupTime = 0
 
 	hc.Hit(1703613474)
 	hc.Hit(1703613481)

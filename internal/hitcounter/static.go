@@ -2,6 +2,7 @@ package hitcounter
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"sync"
 	"time"

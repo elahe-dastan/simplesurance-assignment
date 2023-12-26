@@ -51,15 +51,16 @@ simplesurance-assignment.exe
 ## Implementation
 
 There are different algorithms to implement with their own pros and cons. The simplest approach is implementing
-a deque in which I was concerned about the size of the deque that could grow a lot based on number of requests and also
-though the amortized time complexity will be O(1) but some requests may take much longer than the others so, I
-implemented another algorithm which I'm going to explain besides the rest of code and take a look at why each decision
-was made.
+a deque (double ended queue) in which I was concerned about the potential growth in the deque's size relative to the 
+volume of requests and also though the amortized time complexity will be O(1) but some requests may take much longer 
+than the others so, I implemented another algorithm which I'm going to explain besides the rest of code and take a look 
+at why each decision was made.
 
 In the current implementation we are using a fixed-window-size array in which each room indicates the number of requests
-queried in that second (I descreteized the time by seconds, if this code was going to be used in a use like
-microprocessor we had to change our idea). To return the response we simply sum up the numbers in this array. To write
-each request to this array we follow below precedure.
+queried in the corresponding second (I've discretized time into one-second intervals, if the code were to be used in 
+contexts such as microprocessors, where finer time resolution is needed, we would need to adapt and refine our approach). 
+To return the response we simply sum up the numbers in this array. To write
+each request to this array we follow below procedure.
 
 ```mermaid
 graph TD;
@@ -77,10 +78,11 @@ This solution has O(1) memory and time complexity.
 
 Writing into a file using the current solution is easy. We write
 the array using JSON format into a file which is named `state.json` by default.
-Then read the file in the start phase and if there was any error we fallback to use
-any empty state.
+Then read the file in the start phase and if there was any error we fall back to use
+an empty state.
 
 About how often we want to write to this file we should answer to these question: "How important is consistency?" and
-"How important is availability?" If consistency is so important to use we may choose to write to file by each and every
-request but since writing to a file is so time-consuming, we start another goroutine which writes ot the file
-periodically (period is configurable) by locking the array which seems more configurable and have better performance.
+"How important is availability?" If consistency is so important in this case we may choose to write to the file by each 
+and every request but since writing to a file is so time-consuming and may affect availability under high load, instead 
+I started another goroutine which writes to the file periodically (period is configurable), this approach has better 
+performance.

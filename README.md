@@ -67,7 +67,7 @@ graph TD;
     NewRequest("new request") -->|if time of the request has passed the first server up time window| Empty("empty expired cells");
     Empty("empty expired cells") --> ArrayTimeOfRequest("array[time of request % window]++");
     
-    Empty("empty expired cells\n cells to remove") = (time of new request) - (time of last request)") -->| cells to remove > window| ReCreate("re-create the array");
+    Empty("empty expired cells\n cells to remove = (time of new request) - (time of last request)") -->| cells to remove > window| ReCreate("re-create the array");
     Empty("empty expired cells") -->|(time of new request) - (time of last request) < window| CalculateExpired("time of new");
 ```
 

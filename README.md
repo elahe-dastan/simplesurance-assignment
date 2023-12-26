@@ -63,9 +63,9 @@ each request to this array we follow below precedure.
 
 ```mermaid
 graph TD;
-    TimeOfNewRequest("time of new request") -->|cool| ArrayTimeOfRequest("array[time of request % window]++");
-    TimeOfNewRequest -->|cool| C;
-    ArrayTimeOfRequest -->|cool| D;
+    NewRequest("new request") -->|if time of the request is in the first server up time window| ArrayTimeOfRequest("array[time of request % window]++");
+    NewRequest("new request") -->|if time of the request has passed the first server up time window| B;
+    B -->|cool| ArrayTimeOfRequest("array[time of request % window]++");
     C -->|cool| D;
 ```
 

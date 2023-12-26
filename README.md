@@ -63,10 +63,10 @@ each request to this array we follow below precedure.
 
 ```mermaid
 graph TD;
-    time of new request-->array[time of request % window]++: time of the request is in the first window that the server is up;
-    A-->C;
-    B-->D;
-    C-->D;
+    TimeOfNewRequest("time of new request") -->|cool| ArrayTimeOfRequest("array[time of request % window]++");
+    TimeOfNewRequest -->|cool| C;
+    ArrayTimeOfRequest -->|cool| D;
+    C -->|cool| D;
 ```
 
 This solution has constant memory and time completexity which is good.

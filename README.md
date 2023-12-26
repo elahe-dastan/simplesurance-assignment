@@ -63,7 +63,7 @@ each request to this array we follow below precedure.
 
 ```mermaid
 graph TD;
-    A-->B;
+    time of new request-->array[time of request % window]++: time of the request is in the first window that the server is up;
     A-->C;
     B-->D;
     C-->D;

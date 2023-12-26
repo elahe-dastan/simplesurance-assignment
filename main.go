@@ -24,6 +24,7 @@ const (
 func main() {
 	fmt.Print(banner)
 
+	// Read HitCounter data from disk or make an empty HitCounter if didn't find a file
 	hc, err := hitcounter.FromFileStatic(fn)
 	if err != nil {
 		log.Printf("cannot read hit counter from %s %s", fn, err)
@@ -31,6 +32,7 @@ func main() {
 		hc = hitcounter.NewStatic()
 	}
 
+	// Save HitCounter data to file regularly
 	tick := time.NewTicker(10 * time.Second)
 	defer tick.Stop()
 

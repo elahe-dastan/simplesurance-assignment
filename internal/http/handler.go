@@ -19,6 +19,8 @@ func NewHandler(hc hitcounter.HitCounter) Handler {
 	}
 }
 
+// ServeHTTP calls Hit with current timestamp and then returns the total number of requests in the last minute by
+// calling Count and writing it to response
 func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	h.hc.Hit(time.Now().Unix())
 

@@ -1,0 +1,17 @@
+{
+  "group": {
+    "default": {
+      "targets": [
+        "simplesurance-assignment"
+      ]
+    }
+  },
+  "target": {
+    "simplesurance-assignment": {
+      "dockerfile": "Dockerfile",
+      "tags": [
+        "ghcr.io/elahe-dastan/simplesurance-assignment"
+      ]
+    }
+  }
+}
